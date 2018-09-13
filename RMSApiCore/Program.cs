@@ -21,5 +21,6 @@ namespace RMSApiCore
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
                 .Build();
+        
     }
 }

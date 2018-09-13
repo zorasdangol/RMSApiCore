@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RMSApiCore", "RMSApiCore\RMSApiCore.csproj", "{FAC4025F-616B-4266-BB01-EF207398A2EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RMSApiCore", "RMSApiCore\RMSApiCore.csproj", "{FAC4025F-616B-4266-BB01-EF207398A2EC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KOTapiStandardLibrary", "..\KOTapiStandardLibrary\KOTapiStandardLibrary.csproj", "{A297F897-31BF-40D3-8BEE-5BDB7152E5F5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KOTAppClassLibrary", "..\..\KOTAppClassLibrary\KOTAppClassLibrary\KOTAppClassLibrary.csproj", "{A08450EB-5B71-4574-A562-D290E351DB6B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{FAC4025F-616B-4266-BB01-EF207398A2EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FAC4025F-616B-4266-BB01-EF207398A2EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FAC4025F-616B-4266-BB01-EF207398A2EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A297F897-31BF-40D3-8BEE-5BDB7152E5F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A297F897-31BF-40D3-8BEE-5BDB7152E5F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A297F897-31BF-40D3-8BEE-5BDB7152E5F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A297F897-31BF-40D3-8BEE-5BDB7152E5F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A08450EB-5B71-4574-A562-D290E351DB6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A08450EB-5B71-4574-A562-D290E351DB6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A08450EB-5B71-4574-A562-D290E351DB6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A08450EB-5B71-4574-A562-D290E351DB6B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
