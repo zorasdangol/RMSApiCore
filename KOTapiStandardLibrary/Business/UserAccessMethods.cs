@@ -47,7 +47,36 @@ namespace KOTapiStandardLibrary.Business
         {
             if (cnMain.ExecuteScalar<int>("SELECT COUNT(*) FROM RMD_DEVICEVALIDATION WHERE UNIQUEID = @UNIQUEID", new { UNIQUEID = UNIQUEID }) == 0)
                 cnMain.Execute("INSERT INTO RMD_DEVICEVALIDATION (UNIQUEID, SALESTERMINAL,DIVISION,WAREHOUSE) SELECT TOP 1 @UNIQUEID DEVICE_ID, ST.NAME TERMINAL, @DIVISION DIVISION, W.NAME WAREHOUSE FROM SALESTERMINAL ST, RMD_WAREHOUSE W ORDER BY ISDEFAULT DESC", new { UNIQUEID = UNIQUEID, DIVISION = ConnectionDbInfo.DIVISION});
-        }     
+        }  
+        
+        public static string CheckAccess(User User)
+        {
+            string userName = User.UserName;
+            string password = User.Password;
+
+            string access = "0";
+            string encPassword;
+            string key = "AmitLalJoshi";
+            encPassword = ConnectionDbInfo.Encrypt(password, key);
+            using (SqlConnection cnMain = new SqlConnection(ConnectionDbInfo.ConnectionString))
+            {
+                cnMain.Open();
+                //dt = new DataTable();
+                try
+                {
+                    var dt = cnMain.ExecuteScalar<string>("SELECT AUTHORIZE FROM USERPROFILES WHERE UNAME='" + userName + "' AND PASSWORD='" + encPassword + "'", cnMain);
+                    if(dt == null)
+                    {
+                        dt = "Incorrect username or password ";
+                    }
+                    return dt;
+                }
+                catch (Exception e)
+                {
+                    return e.Message;
+                }
+            }
+        }
 
     }
 }

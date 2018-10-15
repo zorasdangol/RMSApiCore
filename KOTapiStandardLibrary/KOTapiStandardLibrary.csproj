@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\KOTAppClassLibrary\KOTAppClassLibrary\KOTAppClassLibrary.csproj" />
+    <ProjectReference Include="..\..\..\KOTAppClassLibrary\KOTAppClassLibrary\KOTAppClassLibrary.csproj" />
   </ItemGroup>
 
   <ItemGroup>

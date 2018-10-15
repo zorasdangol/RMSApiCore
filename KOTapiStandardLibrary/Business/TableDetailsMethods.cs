@@ -132,8 +132,8 @@ namespace KOTapiStandardLibrary.Business
                                    (
                                        @"SELECT MCODE, ItemDesc DESCA, ISNULL(SUM(Quantity),0) QUANTITY, MAX(KOTTIME) KOTTIME, MAX(UNIT) UNIT,
                                         CASE WHEN K.Remarks='' THEN 'No Remarks' ELSE K.REMARKS END AS REMARKS, 
-                                        CAST(ISBOT AS VARCHAR) IsBarItem, CAST(SNO AS VARCHAR) SNO, MAX(KOT) KOT FROM RMD_KOTPROD K JOIN RMD_KOTMAIN_STATUS KMS ON KMS.KOTID=K.KOTID WHERE KMS.STATUS='ACTIVE' AND K.TABLENO ='{0}'  
-                                        GROUP BY MCODE, ItemDesc, K.Remarks, ISBOT, SNO", TABLENO
+                                        CAST(ISBOT AS VARCHAR) IsBarItem, CAST(SNO AS VARCHAR) SNO,ISNULL(MAX(REFSNO),0) REFSNO, MAX(KOT) KOT FROM RMD_KOTPROD K JOIN RMD_KOTMAIN_STATUS KMS ON KMS.KOTID=K.KOTID WHERE KMS.STATUS='ACTIVE' AND K.TABLENO ='{0}'  
+                                        GROUP BY MCODE, ItemDesc, K.Remarks, ISBOT, SNo", TABLENO
                                    );
                     }
                     else
@@ -141,9 +141,9 @@ namespace KOTapiStandardLibrary.Business
                         Q = string.Format
                                    (
                                        @"SELECT MCODE, ItemDesc DESCA, ISNULL(SUM(Quantity),0) QUANTITY, MAX(KOTTIME) KOTTIME, MAX(UNIT) UNIT,
-                                        CASE WHEN Remarks='' THEN 'No Remarks' ELSE REMARKS END AS REMARKS, 
-                                        CAST(ISBOT AS VARCHAR) IsBarItem, CAST(SNO AS VARCHAR) SNO, MAX(KOT) KOT FROM KOTPROD K WHERE TABLENO ='{0}'  
-                                        GROUP BY MCODE, ItemDesc, Remarks, ISBOT, SNO", TABLENO
+                                        CASE WHEN K.Remarks='' THEN 'No Remarks' ELSE K.REMARKS END AS REMARKS, 
+                                        CAST(ISBOT AS VARCHAR) IsBarItem, CAST(SNO AS VARCHAR) SNO,ISNULL(MAX(REFSNO),0) REFSNO, MAX(KOT) KOT FROM RMD_KOTPROD K JOIN RMD_KOTMAIN_STATUS KMS ON KMS.KOTID=K.KOTID WHERE KMS.STATUS='ACTIVE' AND K.TABLENO ='{0}'  
+                                        GROUP BY MCODE, ItemDesc, K.Remarks, ISBOT, SNo", TABLENO
                                    );
                     }
                     // KOTPROD = (saveSetting == 1) ? "RMD_KOTPROD" : "KOTPROD";
@@ -265,8 +265,8 @@ namespace KOTapiStandardLibrary.Business
                                     cnMain.Execute(QUERY_RMD_KOTMAIN_STATUS, new KOTMAINSTATUS { TABLENO = TABLENO, STATUS = "ACTIVE", KOTID = KOTID }, transaction: trnOrder);
                                     cnMain.Execute(@"INSERT INTO RMD_KOTMAIN (TABLENO, TRNDATE, TRNUSER, DIVISION, TRNTIME, TERMINAL, WAITER, TOTAMNT, VATAMNT, NETAMNT, STAX, PAX, KOTID) SELECT '" + TABLENO
                                         + "','" + Now.ToString("MM/dd/yyyy") + "', '" + TRNUSER + "','" + ConnectionDbInfo.DIVISION + "','" + Now.ToString("h:mm:ss tt") + "','" + ConnectionDbInfo.TERMINAL + "','" + TRNUSER + "','" + TOTAMNT + "','" + VATAMNT + "','" + NETAMNT + "','" + STAX + "','" + PAX + "', '" + KOTID + "'", transaction: trnOrder);
-                                    cnMain.Execute(@"INSERT INTO RMD_KOTPROD (TABLENO, MCODE, UNIT, QUANTITY, REALQTY, AMOUNT, ITEMDESC, KOTTIME, KITCHENDISPATCH, Remarks, DIVISION, TRNDATE, RATE, REALRATE, VAT, SERVICETAX, AltQty, DISCOUNT, WAREHOUSE, NAMNT, ISBOT, KOT, ALTUNIT, WAITERNAME, SNO, KOTID) 
-                                                    VALUES (@TABLENO, @MCODE, @UNIT, @QUANTITY, @REALQTY, @AMOUNT, @ITEMDESC, @KOTTIME, @KITCHENDISPATCH, @Remarks, @DIVISION, @TRNDATE, @RATE, @REALRATE, @VAT, @SERVICETAX, @AltQty, @DISCOUNT,@WAREHOUSE , @NAMNT, @ISBOT,@KOT, @ALTUNIT, @WAITERNAME, @SNO, " + KOTID + ")", alreadyOrderedKot, transaction: trnOrder);
+                                    cnMain.Execute(@"INSERT INTO RMD_KOTPROD (TABLENO, MCODE, UNIT, QUANTITY, REALQTY, AMOUNT, ITEMDESC, KOTTIME, KITCHENDISPATCH, Remarks, DIVISION, TRNDATE, RATE, REALRATE, VAT, SERVICETAX, AltQty, DISCOUNT, WAREHOUSE, NAMNT, ISBOT, KOT, ALTUNIT, WAITERNAME, SNO, REFSNO, KOTID) 
+                                                    VALUES (@TABLENO, @MCODE, @UNIT, @QUANTITY, @REALQTY, @AMOUNT, @ITEMDESC, @KOTTIME, @KITCHENDISPATCH, @Remarks, @DIVISION, @TRNDATE, @RATE, @REALRATE, @VAT, @SERVICETAX, @AltQty, @DISCOUNT,@WAREHOUSE , @NAMNT, @ISBOT,@KOT, @ALTUNIT, @WAITERNAME, @SNO,@REFSNO, " + KOTID + ")", alreadyOrderedKot, transaction: trnOrder);
                                 }
 
                                 foreach (var kp in ProdList)
@@ -279,8 +279,8 @@ namespace KOTapiStandardLibrary.Business
                                         kp.DIVISION = ConnectionDbInfo.DIVISION;
                                         kp.TRNDATE = Now.Date;
                                         kp.WAITERNAME = TRNUSER;
-                                        cnMain.Execute(@"INSERT INTO RMD_KOTPROD (TABLENO, MCODE, UNIT, QUANTITY, REALQTY, AMOUNT, ITEMDESC, KOTTIME, KITCHENDISPATCH, Remarks, DIVISION, TRNDATE, RATE, REALRATE, VAT, SERVICETAX, AltQty, DISCOUNT, WAREHOUSE, NAMNT, ISBOT, KOT, ALTUNIT, WAITERNAME, SNO, KOTID) 
-                                                    VALUES (@TABLENO, @MCODE, @UNIT, @QUANTITY, @REALQTY, @AMOUNT, @ITEMDESC, @KOTTIME, 0, @REMARKS, @DIVISION, @TRNDATE, @RATE, @REALRATE, @VAT, @SERVICETAX, @AltQty, 0, (SELECT NAME FROM RMD_WAREHOUSE WHERE ISDEFAULT='T'), @NAMNT, @ISBOT,(SELECT CurNo+1 FROM RMD_SEQUENCES WHERE VNAME='KOT'), @ALTUNIT, @WAITERNAME, @SNO, " + KOTID + ")", kp, transaction: trnOrder);
+                                        cnMain.Execute(@"INSERT INTO RMD_KOTPROD (TABLENO, MCODE, UNIT, QUANTITY, REALQTY, AMOUNT, ITEMDESC, KOTTIME, KITCHENDISPATCH, Remarks, DIVISION, TRNDATE, RATE, REALRATE, VAT, SERVICETAX, AltQty, DISCOUNT, WAREHOUSE, NAMNT, ISBOT, KOT, ALTUNIT, WAITERNAME, SNO, REFSNO, KOTID) 
+                                                    VALUES (@TABLENO, @MCODE, @UNIT, @QUANTITY, @REALQTY, @AMOUNT, @ITEMDESC, @KOTTIME, 0, @REMARKS, @DIVISION, @TRNDATE, @RATE, @REALRATE, @VAT, @SERVICETAX, @AltQty, 0, (SELECT NAME FROM RMD_WAREHOUSE WHERE ISDEFAULT='T'), @NAMNT, @ISBOT,(SELECT CurNo+1 FROM RMD_SEQUENCES WHERE VNAME='KOT'), @ALTUNIT, @WAITERNAME, @SNO, @REFSNO, " + KOTID + ")", kp, transaction: trnOrder);
 
                                         cnMain.Execute("INSERT INTO PRINTKOT (TABLENO, DESCA, MENUCODE, ISBOT, QUANTITY, REMARKS, SNO, UNIT, MCODE, TRNDATE, KOTTIME, USERNAME, KOT, PAX, KOTID) SELECT '" + TABLENO
                                             + "', DESCA, MENUCODE, ISBARITEM,'" + kp.Quantity + "','" + ((kp.Remarks.ToLower() == "no remarks") ? "" : kp.Remarks) + "','" + kp.SNO + "','" + kp.UNIT + "','" + kp.MCODE

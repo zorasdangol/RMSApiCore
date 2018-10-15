@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using KOTapiStandardLibrary.Business;
@@ -17,6 +18,13 @@ namespace RMSApiCore.Controllers
         public string postuserVerification([FromBody]User User)
         {
             return UserAccessMethods.postuserVerification(User);
+        }
+        
+        [Route("api/CheckAccess")]
+        [HttpPost]
+        public string CheckAccess([FromBody] User User)
+        {
+            return UserAccessMethods.CheckAccess(User);            
         }
     }
 }

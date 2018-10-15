@@ -19,7 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\KOTAppClassLibrary\KOTAppClassLibrary\KOTAppClassLibrary.csproj" />
-    <ProjectReference Include="..\..\KOTapiStandardLibrary\KOTapiStandardLibrary.csproj" />
+    <ProjectReference Include="..\KOTapiStandardLibrary\KOTapiStandardLibrary.csproj" />
   </ItemGroup>
 
 </Project>
