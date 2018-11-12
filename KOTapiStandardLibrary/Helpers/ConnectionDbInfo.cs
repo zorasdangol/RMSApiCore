@@ -149,8 +149,8 @@ namespace KOTapiStandardLibrary.Helpers
             if (GetDbConnectionInfo())
             {
                 SqlConnectionStringBuilder sbr = new SqlConnectionStringBuilder();
-                sbr.UserID = _SaUser;
-                sbr.Password = Encrypt(_SaPassword);
+                sbr.UserID = _SaUser;               
+                sbr.Password = (Encrypt(HexadecimalEncoding.FromHexString(_SaPassword)));
                 sbr.InitialCatalog = DATABASE;
                 sbr.DataSource = SERVER;
                 return sbr.ConnectionString;

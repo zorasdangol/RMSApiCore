@@ -47,5 +47,16 @@ namespace RMSApiCore.Controllers
         {
             return TableDetailsMethods.postsaveOrders_New(KOTData);
         }
+
+
+        [Route("api/CancelOrders")]
+        [HttpGet("{tableNo}/{user}/{remarks}")]
+        public string cancelOrders(string tableNo,string user, string remarks)
+        {
+            return TableDetailsMethods.CancelOrder(tableNo, user, remarks);
+            //return TableDetailsMethods.getTableItemsDetail(TABLENO);
+            return null;
+        }
+
     }
 }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Text;
 
 namespace KOTapiStandardLibrary.Helpers
@@ -82,6 +83,22 @@ namespace KOTapiStandardLibrary.Helpers
             {
                 //IMSErrorHandler.OnErrorCaught(new ImsExceptionArgs("Globalclass.GetBSDate", ex.GetBaseException().Message, ex));
                 return string.Empty;
+            }
+        }
+
+        public static DateTime ServerDate()
+        {
+            using (SqlConnection con = new SqlConnection(ConnectionDbInfo.ConnectionString))
+            {
+                return con.ExecuteScalar<DateTime>("SELECT GETDATE()");
+            }
+        }
+        public static string ServerTime()
+        {
+            using (SqlConnection con = new SqlConnection(ConnectionDbInfo.ConnectionString))
+            {
+                var date = con.Query("select GETDATE() as DATE").SingleOrDefault();
+                return Convert.ToDateTime(date.DATE).ToString("hh:mm:ss tt");
             }
         }
 

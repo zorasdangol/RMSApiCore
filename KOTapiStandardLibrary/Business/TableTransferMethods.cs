@@ -12,8 +12,11 @@ namespace KOTapiStandardLibrary.Business
 {
     public static class TableTransferMethods
     {
+        static string QUERY_RMD_KOTMAIN_STATUS = "INSERT INTO RMD_KOTMAIN_STATUS(KOTID,TABLENO,STATUS,REMARKS,Division,edate) VALUES (@KOTID,@TABLENO,@STATUS,@REMARKS,'" + GlobalClass.Division + "',getdate())";
+
         public static string transferAllTable(string tableNew, string tableOld)
         {
+           
             string saveSetting = "";
             string count = "";
 
@@ -41,10 +44,13 @@ namespace KOTapiStandardLibrary.Business
                             oldkotMAIN.KOTID = KOTID;
                             oldkotPROD.ForEach(x => x.TABLENO = tableNew);
                             oldkotPROD.ForEach(x => x.KOTID = KOTID);
-                            cnMain.Execute("INSERT INTO RMD_KOTMAIN_STATUS (KOTID,TABLENO,STATUS) VALUES(@KOTID,@TABLENO,@STATUS)", new KOTMAINSTATUS { KOTID = KOTID, TABLENO = tableNew, STATUS = "ACTIVE" });
+                            //cnMain.Execute("INSERT INTO RMD_KOTMAIN_STATUS (KOTID,TABLENO,STATUS) VALUES(@KOTID,@TABLENO,@STATUS)", new KOTMAINSTATUS { KOTID = KOTID, TABLENO = tableNew, STATUS = "ACTIVE" });
                             cnMain.Execute(@"INSERT INTO RMD_KOTMAIN (TABLENO, TRNDATE,TRNTIME,TOTAMNT,DCAMNT,DCRATE,VATAMNT,NETAMNT,WAITER,TRNUSER,INDDIS,REMARKS,TERMINAL,EDITUSER,BILLNO,DCRATE2,DIVISION,STAX,MEMID,BILLTO,BILLTOVAT,FLG,BILLTOADD,ROUNDUP,PAX,BILLED,STATUS,REFBILLED,PHISCALID, KOTID) 
                                         VALUES(@TABLENO, @TRNDATE,@TRNTIME,@TOTAMNT,@DCAMNT,@DCRATE,@VATAMNT,@NETAMNT,@WAITER,@TRNUSER,@INDDIS,@REMARKS,@TERMINAL,@EDITUSER,@BILLNO,@DCRATE2,@DIVISION,@STAX,@MEMID,@BILLTO,@BILLTOVAT,@FLG,@BILLTOADD,@ROUNDUP,@PAX,@BILLED,@STATUS,@REFBILLED,@PHISCALID,@KOTID)", oldkotMAIN);
                             cnMain.Execute(@"INSERT INTO RMD_KOTPROD(KOTID,TABLENO,TRNDATE,MCODE,UNIT,Quantity,RealQty,AltQty,RATE,AMOUNT,DISCOUNT,VAT,REALRATE,IDIS,ALTUNIT,WAREHOUSE,KOT,SNO,ItemDesc,DIVISION,SERVICETAX,NAMNT,KOTTIME,KitchenDispatch,DispatchUser,Remarks,ISBOT,ComboItem,ComboItemQty, WaiterName, REFSNO,RECEIPES,TAKEAWAY) VALUES(@KOTID,@TABLENO,@TRNDATE,@MCODE,@UNIT,@Quantity,@RealQty,@AltQty,@RATE,@AMOUNT,@DISCOUNT,@VAT,@REALRATE,@IDIS,@ALTUNIT,@WAREHOUSE,@KOT,@SNO,@ItemDesc,@DIVISION,@SERVICETAX,@NAMNT,@KOTTIME,@KitchenDispatch,@DispatchUser,@Remarks,@ISBOT,@ComboItem,@ComboItemQty, @WaiterName, @REFSNO,@RECEIPES,@TAKEAWAY)", oldkotPROD);
+
+                            cnMain.Execute(QUERY_RMD_KOTMAIN_STATUS, new KOTMAINSTATUS { TABLENO = tableNew, STATUS = "ACTIVE", KOTID = KOTID });
+
                             cnMain.ExecuteScalar<int>("UPDATE RMD_KOTMAIN_STATUS SET REMARKS='Transfer To Id- " + KOTID + "' WHERE KOTID='" + oldKOTID + "'");
                             // db.executeNonQuery("UPDATE RMD_KOTMAIN SET TABLENO='" + tableNew + "' WHERE TABLENO='" + tableOld + "'", trn, cnMain);
                             // db.executeNonQuery("UPDATE RMD_KOTPROD SET TABLENO='" + tableNew + "' WHERE TABLENO='" + tableOld + "'", trn, cnMain);
@@ -115,7 +121,7 @@ namespace KOTapiStandardLibrary.Business
                     {
                         return "Data MisMatch Error: No Items found for this table";
                     }
-                    int oldKotId = KPList.FirstOrDefault().KOTID;
+                    int oldKotId = Convert.ToInt32(KPList.FirstOrDefault().KOTID);
                     using (SqlTransaction tran = cnMain.BeginTransaction())
                     {
                         // cnMain.Execute("DELETE FROM RMD_KOTMAIN WHERE TABLENO='" + TABLENO + "'", transaction: tran);
@@ -133,11 +139,11 @@ namespace KOTapiStandardLibrary.Business
                                         KProd.Quantity -= (decimal)kp.Quantity;
                                         Break = true;
                                     }
-                                    else if (KProd.Quantity > 0)
-                                    {
-                                        kp.Quantity = (double)KProd.Quantity;
-                                        KProd.Quantity -= (decimal)kp.Quantity;
-                                    }
+                                    //else if (KProd.Quantity > 0)
+                                    //{
+                                    //    kp.Quantity = (double)KProd.Quantity;
+                                    //    KProd.Quantity -= (decimal)kp.Quantity;
+                                    //}
                                     else
                                         continue;
                                     kp.KOT = KProd.KOT;
@@ -167,14 +173,45 @@ namespace KOTapiStandardLibrary.Business
                             int KOTID = cnMain.ExecuteScalar<int>("UPDATE RMD_SEQUENCES SET CurNo = CurNo + 1 output inserted.CurNo WHERE VNAME = 'KOTID'", transaction: tran);
                             string Remarks = "Split, " + TABLENO + ", " + oldKotId;
                             RemarkStatus += KOTID + ",";
-                            cnMain.Execute("INSERT INTO RMD_KOTMAIN_STATUS (KOTID,TABLENO,STATUS) VALUES(@KOTID,@TABLENO,@STATUS)", new KOTMAINSTATUS { KOTID = KOTID, TABLENO = TBLNO, STATUS = "ACTIVE" }, transaction: tran);
-                            cnMain.Execute(@"INSERT INTO RMD_KOTMAIN (TABLENO, TRNDATE, TRNUSER, DIVISION, TRNTIME, TERMINAL, WAITER, TOTAMNT, VATAMNT, NETAMNT, STAX, PAX, KOTID, EDITUSER) 
-                                            VALUES('" + TBLNO + "',CONVERT(VARCHAR,GETDATE(),101), '" + TRNUSER + "','" + GlobalClass.Division + "','" + DateTime.Now.ToString("hh:mm:ss tt") + "','" + GlobalClass.Terminal + "','" + TRNUSER + "'," + TOTAMNT + "," + VATAMNT + "," + NETAMNT + "," + STAX + "," + PAX + ", " + KOTID + ", '" + Remarks + "')", transaction: tran);
-                            foreach (KOTProd kp in ProdList.Where(x => x.TABLENO == TBLNO))
+
+
+                            var availableKOTID = cnMain.ExecuteScalar<int>("select KOTID from rmd_kotmain_status where status='ACTIVE' and tableno='" + TBLNO +"'",transaction: tran);
+
+
+                            //empty table split
+                            if (availableKOTID == 0)
                             {
-                                cnMain.Execute(@"INSERT INTO RMD_KOTPROD (TABLENO, MCODE, UNIT, QUANTITY, REALQTY, AMOUNT, ItemDesc, KOTTIME, KITCHENDISPATCH, Remarks, DIVISION, TRNDATE, RATE, REALRATE, VAT, SERVICETAX, AltQty, DISCOUNT, WAREHOUSE, NAMNT, ISBOT, KOT, SNO, WAITERNAME, KOTID) 
+                                // cnMain.Execute("INSERT INTO RMD_KOTMAIN_STATUS (KOTID,TABLENO,STATUS,Division) VALUES(@KOTID,@TABLENO,@STATUS,')", new KOTMAINSTATUS { KOTID = KOTID, TABLENO = TBLNO, STATUS = "ACTIVE" }, transaction: tran);
+                                cnMain.Execute(@"INSERT INTO RMD_KOTMAIN (TABLENO, TRNDATE, TRNUSER, DIVISION, TRNTIME, TERMINAL, WAITER, TOTAMNT, VATAMNT, NETAMNT, STAX, PAX, KOTID, EDITUSER) 
+                                            VALUES('" + TBLNO + "',CONVERT(VARCHAR,GETDATE(),101), '" + TRNUSER + "','" + GlobalClass.Division + "','" + DateTime.Now.ToString("hh:mm:ss tt") + "','" + GlobalClass.Terminal + "','" + TRNUSER + "'," + TOTAMNT + "," + VATAMNT + "," + NETAMNT + "," + STAX + "," + PAX + ", " + KOTID + ", '" + Remarks + "')", transaction: tran);
+
+                                cnMain.Execute(QUERY_RMD_KOTMAIN_STATUS, new KOTMAINSTATUS { TABLENO = TBLNO, STATUS = "ACTIVE", KOTID = KOTID }, transaction: tran);
+
+                                foreach (KOTProd kp in ProdList.Where(x => x.TABLENO == TBLNO))
+                                {
+                                    int SNO = cnMain.ExecuteScalar<int>("SELECT ISNULL(MAX(SNO), 0) FROM RMD_KOTPROD KP JOIN RMD_KOTMAIN_STATUS KMS ON KP.KOTID=KMS.KOTID WHERE KMS.STATUS='ACTIVE' AND KP.TABLENO='" + TBLNO + "'", transaction: tran);
+                                    kp.SNO = SNO + 1;
+                                    cnMain.Execute(@"INSERT INTO RMD_KOTPROD (TABLENO, MCODE, UNIT, QUANTITY, REALQTY, AMOUNT, ItemDesc, KOTTIME, KITCHENDISPATCH, Remarks, DIVISION, TRNDATE, RATE, REALRATE, VAT, SERVICETAX, AltQty, DISCOUNT, WAREHOUSE, NAMNT, ISBOT, KOT, SNO, WAITERNAME, KOTID) 
                                              VALUES (@TABLENO, @MCODE, @UNIT, @QUANTITY, @QUANTITY, @AMOUNT, @ItemDesc, @KOTTIME, 0, @Remarks, '" + GlobalClass.Division + "', CONVERT(VARCHAR,GETDATE(),101), @RATE, @RATE, @VAT, @SERVICETAX, 0, 0, @WAREHOUSE, @NAMNT, @ISBOT, @KOT, @SNO, @WAITERNAME, " + KOTID + ")", kp, transaction: tran);
+                                }
                             }
+
+
+                            //packed table split
+                            else
+                            {
+                                
+                                foreach (KOTProd kp in ProdList.Where(x => x.TABLENO == TBLNO))
+                                {
+                                    int SNO = cnMain.ExecuteScalar<int>("SELECT ISNULL(MAX(SNO), 0) FROM RMD_KOTPROD KP JOIN RMD_KOTMAIN_STATUS KMS ON KP.KOTID=KMS.KOTID WHERE KMS.STATUS='ACTIVE' AND KP.TABLENO='" + TBLNO + "'",transaction: tran);
+                                    kp.SNO = SNO + 1;
+                                    cnMain.Execute(@"INSERT INTO RMD_KOTPROD (TABLENO, MCODE, UNIT, QUANTITY, REALQTY, AMOUNT, ItemDesc, KOTTIME, KITCHENDISPATCH, Remarks, DIVISION, TRNDATE, RATE, REALRATE, VAT, SERVICETAX, AltQty, DISCOUNT, WAREHOUSE, NAMNT, ISBOT, KOT, SNO, WAITERNAME, KOTID) 
+                                             VALUES (@TABLENO, @MCODE, @UNIT, @QUANTITY, @QUANTITY, @AMOUNT, @ItemDesc, @KOTTIME, 0, @Remarks, '" + GlobalClass.Division + "', CONVERT(VARCHAR,GETDATE(),101), @RATE, @RATE, @VAT, @SERVICETAX, 0, 0, @WAREHOUSE, @NAMNT, @ISBOT, @KOT, @SNO, @WAITERNAME, " + availableKOTID + ")", kp, transaction: tran);
+                                }
+
+                            }
+
+                            
                         }
 
                         cnMain.Execute("UPDATE RMD_KOTMAIN_STATUS SET REMARKS='" + RemarkStatus + "'  WHERE KOTID=" + updatedKotId, transaction: tran);
