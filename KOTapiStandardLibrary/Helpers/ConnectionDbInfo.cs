@@ -12,7 +12,7 @@ namespace KOTapiStandardLibrary.Helpers
     public class ConnectionDbInfo
     {
         public static string AppDataPath;
-        private static string conDllName = "\\RMSDbCon.dll";
+        private static string conDllName = "\\sqldbcon.dll";
         private static string _USER = "";
         private static string _PASSWORD = "";
         private static string _DATABASE = "";
@@ -121,7 +121,7 @@ namespace KOTapiStandardLibrary.Helpers
                 {
                     if (ver == "New")
                     {
-                        _SaPassword = HexadecimalEncoding.FromHexString(_SaPassword);
+                        _SaPassword = HexadecimalEncoding.FromHexString(res.PASSWORD);
                     }
                 }
                 _connectionstring = _CS = GetConnectionString();
@@ -150,7 +150,7 @@ namespace KOTapiStandardLibrary.Helpers
             {
                 SqlConnectionStringBuilder sbr = new SqlConnectionStringBuilder();
                 sbr.UserID = _SaUser;               
-                sbr.Password = (Encrypt(HexadecimalEncoding.FromHexString(_SaPassword)));
+                sbr.Password = (Encrypt(_SaPassword));
                 sbr.InitialCatalog = DATABASE;
                 sbr.DataSource = SERVER;
                 return sbr.ConnectionString;

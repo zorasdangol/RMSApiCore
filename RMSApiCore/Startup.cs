@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using KOTapiStandardLibrary.Helpers;
+using ImsPosLibraryCore.Helper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -37,7 +37,8 @@ namespace RMSApiCore
             }
 
             app.UseMvc();
-            new ConnectionDbInfo();
+            GlobalSetting.GetSetting(ConnectionDbInfo.ConnectionString);
+            //new ConnectionDbInfo();
         }
     }
 }

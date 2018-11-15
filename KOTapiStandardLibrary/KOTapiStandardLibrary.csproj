@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Helpers\ConnectionDbInfo.cs" />
+    <Compile Remove="Helpers\GlobalClass.cs" />
+    <Compile Remove="Helpers\GParse.cs" />
+    <Compile Remove="Helpers\HexadecimalEncoding.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Dapper" Version="1.50.5" />
     <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
     <PackageReference Include="Microsoft.VisualBasic" Version="10.3.0" />
@@ -12,13 +19,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\KOTAppClassLibrary\KOTAppClassLibrary\KOTAppClassLibrary.csproj" />
+    <ProjectReference Include="..\..\..\..\IMSPOS\POSstandardLibrary\POSstandardLibrary.csproj" />
+    <ProjectReference Include="..\..\RMSnewApiClassLibrary\KOTAppClassLibrary\KOTAppClassLibrary.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
       <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\newtonsoft.json\10.0.1\lib\netstandard1.3\Newtonsoft.Json.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Helpers\" />
   </ItemGroup>
 
 </Project>

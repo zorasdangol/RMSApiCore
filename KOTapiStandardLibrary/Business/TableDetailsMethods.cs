@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using KOTapiStandardLibrary.Helpers;
+using ImsPosLibraryCore.Helper;
 using KOTAppClassLibrary.Models;
 using System;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ namespace KOTapiStandardLibrary.Business
 {
     public static class TableDetailsMethods
     {
-        static string QUERY_RMD_KOTMAIN_STATUS = "INSERT INTO RMD_KOTMAIN_STATUS(KOTID,TABLENO,STATUS,REMARKS,Division,edate) VALUES (@KOTID,@TABLENO,@STATUS,@REMARKS,'" + GlobalClass.Division + "',getdate())";
+        static string QUERY_RMD_KOTMAIN_STATUS = "INSERT INTO RMD_KOTMAIN_STATUS(KOTID,TABLENO,STATUS,REMARKS,Division,edate) VALUES (@KOTID,@TABLENO,@STATUS,@REMARKS,'" + GlobalClass.DIVISION + "',getdate())";
         static string InsertQueryForKotPrint = "insert into printkot(KOTID,TABLENO,DESCA,MENUCODE,ISBOT,QUANTITY,REMARKS,SNO,UNIT,MCODE,TRNDATE,KOTTIME,KOT,USERNAME,PAX,ComboItem, REFSNO) values(@KOTID,@TABLENO,@DESCA,@MENUCODE,@ISBOT,@QUANTITY,@REMARKS,@SNO,@UNIT,@MCODE,@TRNDATE,@KOTTIME,@KOT,@USERNAME,@PAX,@ComboItem, @REFSNO)";
 
         public static String getdayCloseTable()
@@ -158,7 +158,7 @@ namespace KOTapiStandardLibrary.Business
                 //DateTime objDate = Convert.ToDateTime(kp.KOTTIME, dtfi);
 
                 // pk.KOTTIME = objDate;
-                pk.KOTTIME = GlobalClass.ServerDate();
+                pk.KOTTIME = GlobalClass.ServerDate;
                 pk.KOT = kp.KOT;
                 pk.USERNAME = user;
                 //pk.ComboItem = kp.ComboItemDesc;
@@ -359,7 +359,7 @@ namespace KOTapiStandardLibrary.Business
 
                                 if (string.IsNullOrEmpty(cnMain.ExecuteScalar<string>("SELECT VNAME FROM RMD_SEQUENCES WHERE VNAME='KOTID'", transaction: trnOrder)))
                                 {
-                                    cnMain.Execute("INSERT INTO RMD_SEQUENCES (VNAME,AUTO,Start,CurNo,Division) VALUES('KOTID',1,1,1,'" + GlobalClass.Division + "')", transaction: trnOrder);
+                                    cnMain.Execute("INSERT INTO RMD_SEQUENCES (VNAME,AUTO,Start,CurNo,Division) VALUES('KOTID',1,1,1,'" + GlobalClass.DIVISION + "')", transaction: trnOrder);
                                 }
 
 

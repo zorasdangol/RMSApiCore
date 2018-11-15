@@ -49,8 +49,8 @@ namespace RMSApiCore.Controllers
         }
 
 
-        [Route("api/CancelOrders")]
-        [HttpGet("{tableNo}/{user}/{remarks}")]
+        [Route("api/CancelOrders/{tableNo}/{user}/{remarks}")]
+        //[HttpGet("CancelOrders/{tableNo}/{user}/{remarks}")]
         public string cancelOrders(string tableNo,string user, string remarks)
         {
             return TableDetailsMethods.CancelOrder(tableNo, user, remarks);
