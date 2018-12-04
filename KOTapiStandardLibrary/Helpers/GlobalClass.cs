@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using POSstandardLibrary.Helper;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -11,13 +12,13 @@ namespace KOTapiStandardLibrary.Helpers
     public class GlobalClass
     {
         //public static string DataConnectionString;
-        public static string Division = "MMX";
-        public static string Terminal = "AAA";
-        public static int GraceTime;
-        public static string CompanyName;
-        public static string CompanyAddress;
-        public static decimal VAT = 13;
-        public static Exception LastException;
+        //public static string Division = "MMX";
+        //public static string Terminal = "AAA";
+        //public static int GraceTime;
+        //public static string CompanyName;
+        //public static string CompanyAddress;
+        //public static decimal VAT = 13;
+        //public static Exception LastException;
         public static string GetTime = "(SELECT CONVERT(VARCHAR,(SELECT GETDate()),8))";
         public static string GetDate = "(SELECT GETDATE())";
         //public static string DataConnectionString { get { return ConfigurationManager.ConnectionStrings["DBSETTING"].ConnectionString; } }
@@ -74,7 +75,7 @@ namespace KOTapiStandardLibrary.Helpers
         {
             try
             {
-                using (SqlConnection Con = new SqlConnection(Helpers.ConnectionDbInfo.ConnectionString))
+                using (SqlConnection Con = new SqlConnection(ConnectionDbInfo.ConnectionString))
                 {
                     return Con.ExecuteScalar<string>("select dbo.dateToMiti('" + Adate.ToString("dd/MMM/yyyy") + "','/')");
                 }

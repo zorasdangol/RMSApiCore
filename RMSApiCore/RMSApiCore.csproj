@@ -10,7 +10,9 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.0.4" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -18,8 +20,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\RMSnewApiClassLibrary\KOTAppClassLibrary\KOTAppClassLibrary.csproj" />
+    <ProjectReference Include="..\..\..\KOTAppClassLibrary\KOTAppClassLibrary\KOTAppClassLibrary.csproj" />
     <ProjectReference Include="..\KOTapiStandardLibrary\KOTapiStandardLibrary.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="POSstandardLibrary">
+      <HintPath>..\..\..\KOTAppClassLibrary\Libraries\POSstandardLibrary.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

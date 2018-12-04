@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using KOTapiStandardLibrary.Business;
-using KOTapiStandardLibrary.Models;
+using KOTAppClassLibrary.Models;
+
 namespace RMSApiCore.Controllers
 {
 
@@ -8,11 +9,10 @@ namespace RMSApiCore.Controllers
     {
         [Produces("application/json")]
         [Route("api/GenerateBill/{TableNo}")]
-        public IActionResult GenerateBill(string TableNo)
+        public FunctionResponse GenerateBill(string TableNo)
         {
             BillGenerationMethod billGenerationMethod = new BillGenerationMethod();
-            BillMain bill= billGenerationMethod.GenerateBill(TableNo);
-            return new OkObjectResult(new { ok = "ok",obj=bill });
+            return billGenerationMethod.GenerateBill(TableNo);
         }
 
         

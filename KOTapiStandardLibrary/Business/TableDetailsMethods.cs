@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using ImsPosLibraryCore.Helper;
+using POSstandardLibrary.Helper;
 using KOTAppClassLibrary.Models;
 using System;
 using System.Collections.Generic;
@@ -10,12 +10,12 @@ using System.Text;
 
 namespace KOTapiStandardLibrary.Business
 {
-    public static class TableDetailsMethods
+    public class TableDetailsMethods
     {
-        static string QUERY_RMD_KOTMAIN_STATUS = "INSERT INTO RMD_KOTMAIN_STATUS(KOTID,TABLENO,STATUS,REMARKS,Division,edate) VALUES (@KOTID,@TABLENO,@STATUS,@REMARKS,'" + GlobalClass.DIVISION + "',getdate())";
+        static string QUERY_RMD_KOTMAIN_STATUS = "INSERT INTO RMD_KOTMAIN_STATUS(KOTID,TABLENO,STATUS,REMARKS,Division,edate) VALUES (@KOTID,@TABLENO,@STATUS,@REMARKS,'" + ConnectionDbInfo.DIVISION + "',getdate())";
         static string InsertQueryForKotPrint = "insert into printkot(KOTID,TABLENO,DESCA,MENUCODE,ISBOT,QUANTITY,REMARKS,SNO,UNIT,MCODE,TRNDATE,KOTTIME,KOT,USERNAME,PAX,ComboItem, REFSNO) values(@KOTID,@TABLENO,@DESCA,@MENUCODE,@ISBOT,@QUANTITY,@REMARKS,@SNO,@UNIT,@MCODE,@TRNDATE,@KOTTIME,@KOT,@USERNAME,@PAX,@ComboItem, @REFSNO)";
 
-        public static String getdayCloseTable()
+        public String getdayCloseTable()
         {
             try
             {
@@ -42,7 +42,7 @@ namespace KOTapiStandardLibrary.Business
             }
         }
 
-        public static string CancelOrder(string tableNo, string user, string remarks)
+        public string CancelOrder(string tableNo, string user, string remarks)
         {
             try
             {
@@ -133,7 +133,7 @@ namespace KOTapiStandardLibrary.Business
             }
         }
 
-        private static ObservableCollection<PrintKot> GetPrintKotForSave(KotMain kmO,string user)
+        private ObservableCollection<PrintKot> GetPrintKotForSave(KotMain kmO,string user)
         {
             ObservableCollection<PrintKot> pklist = new ObservableCollection<PrintKot>();
             foreach (var kp in kmO.KotProdList)
@@ -168,7 +168,7 @@ namespace KOTapiStandardLibrary.Business
             return pklist;
         }
 
-        private static string getMenuCode(string mcode)
+        private string getMenuCode(string mcode)
         {
             try
             {
@@ -182,7 +182,7 @@ namespace KOTapiStandardLibrary.Business
             catch (Exception ex) { return ""; }
         }
 
-        public static FunctionResponse getTable()
+        public FunctionResponse getTable()
         {
             try
             {
@@ -225,7 +225,7 @@ namespace KOTapiStandardLibrary.Business
             }
         }
 
-        public static FunctionResponse getPackedTable()
+        public FunctionResponse getPackedTable()
         {
             List<TableDetail> PackTables = new List<TableDetail>();
             string saveSetting = "";
@@ -258,7 +258,7 @@ namespace KOTapiStandardLibrary.Business
             }
         }
 
-        public static FunctionResponse getTableItemsDetail(string TABLENO)
+        public FunctionResponse getTableItemsDetail(string TABLENO)
         {
             byte saveSetting;
             //string KOTPROD;
@@ -311,7 +311,7 @@ namespace KOTapiStandardLibrary.Business
 
         }
 
-        public static string postsaveOrders_New(KOTListTransfer KOTData)
+        public string postsaveOrders_New(KOTListTransfer KOTData)
         {
             try
             {
@@ -341,6 +341,8 @@ namespace KOTapiStandardLibrary.Business
                 }
 
 
+
+
                 using (SqlConnection cnMain = new SqlConnection(ConnectionDbInfo.ConnectionString))
                 {
                     cnMain.Open();
@@ -359,7 +361,7 @@ namespace KOTapiStandardLibrary.Business
 
                                 if (string.IsNullOrEmpty(cnMain.ExecuteScalar<string>("SELECT VNAME FROM RMD_SEQUENCES WHERE VNAME='KOTID'", transaction: trnOrder)))
                                 {
-                                    cnMain.Execute("INSERT INTO RMD_SEQUENCES (VNAME,AUTO,Start,CurNo,Division) VALUES('KOTID',1,1,1,'" + GlobalClass.DIVISION + "')", transaction: trnOrder);
+                                    cnMain.Execute("INSERT INTO RMD_SEQUENCES (VNAME,AUTO,Start,CurNo,Division) VALUES('KOTID',1,1,1,'" + ConnectionDbInfo.DIVISION + "')", transaction: trnOrder);
                                 }
 
 

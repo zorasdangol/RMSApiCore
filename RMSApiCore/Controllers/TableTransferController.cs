@@ -20,7 +20,7 @@ namespace RMSApiCore.Controllers
         [HttpGet("{tableNew}/{tableOld}")]
         public string transferAllTable(string tableNew, string tableOld)
         {
-            return TableTransferMethods.transferAllTable(tableNew, tableOld);
+            return new TableTransferMethods().transferAllTable(tableNew, tableOld);
         }
 
 
@@ -28,14 +28,14 @@ namespace RMSApiCore.Controllers
         [HttpPost]
         public string MergeTable([FromBody] MergeTransfer mergeTransfer)
         {
-            return TableTransferMethods.MergeTable(mergeTransfer);           
+            return new TableTransferMethods().MergeTable(mergeTransfer);           
         }
 
         [Route("api/SplitTable")]
         [HttpPost]   
         public string SplitTable([FromBody] SplitTransfer SplitTransfer)
         {
-            return TableTransferMethods.SplitTable(SplitTransfer);           
+            return new TableTransferMethods().SplitTable(SplitTransfer);           
 
         }
 

@@ -7,15 +7,15 @@ using Dapper;
 using System.Text;
 using KOTAppClassLibrary.Models;
 using Newtonsoft.Json;
-using ImsPosLibraryCore.Helper;
+using POSstandardLibrary.Helper;
 
 namespace KOTapiStandardLibrary.Business
 {
-    public static class TableTransferMethods
+    public class TableTransferMethods
     {
-        static string QUERY_RMD_KOTMAIN_STATUS = "INSERT INTO RMD_KOTMAIN_STATUS(KOTID,TABLENO,STATUS,REMARKS,Division,edate) VALUES (@KOTID,@TABLENO,@STATUS,@REMARKS,'" + GlobalClass.DIVISION + "',getdate())";
+        static string QUERY_RMD_KOTMAIN_STATUS = "INSERT INTO RMD_KOTMAIN_STATUS(KOTID,TABLENO,STATUS,REMARKS,Division,edate) VALUES (@KOTID,@TABLENO,@STATUS,@REMARKS,'" + ConnectionDbInfo.DIVISION + "',getdate())";
 
-        public static string transferAllTable(string tableNew, string tableOld)
+        public string transferAllTable(string tableNew, string tableOld)
         {
            
             string saveSetting = "";
@@ -98,7 +98,7 @@ namespace KOTapiStandardLibrary.Business
             
         }
 
-        public static string SplitTable(SplitTransfer SplitTransfer)
+        public string SplitTable(SplitTransfer SplitTransfer)
         {
             try
             {
@@ -184,7 +184,7 @@ namespace KOTapiStandardLibrary.Business
                             {
                                 // cnMain.Execute("INSERT INTO RMD_KOTMAIN_STATUS (KOTID,TABLENO,STATUS,Division) VALUES(@KOTID,@TABLENO,@STATUS,')", new KOTMAINSTATUS { KOTID = KOTID, TABLENO = TBLNO, STATUS = "ACTIVE" }, transaction: tran);
                                 cnMain.Execute(@"INSERT INTO RMD_KOTMAIN (TABLENO, TRNDATE, TRNUSER, DIVISION, TRNTIME, TERMINAL, WAITER, TOTAMNT, VATAMNT, NETAMNT, STAX, PAX, KOTID, EDITUSER) 
-                                            VALUES('" + TBLNO + "',CONVERT(VARCHAR,GETDATE(),101), '" + TRNUSER + "','" + GlobalClass.DIVISION + "','" + DateTime.Now.ToString("hh:mm:ss tt") + "','" + GlobalClass.Terminal + "','" + TRNUSER + "'," + TOTAMNT + "," + VATAMNT + "," + NETAMNT + "," + STAX + "," + PAX + ", " + KOTID + ", '" + Remarks + "')", transaction: tran);
+                                            VALUES('" + TBLNO + "',CONVERT(VARCHAR,GETDATE(),101), '" + TRNUSER + "','" + ConnectionDbInfo.DIVISION + "','" + DateTime.Now.ToString("hh:mm:ss tt") + "','" + ConnectionDbInfo.TERMINAL + "','" + TRNUSER + "'," + TOTAMNT + "," + VATAMNT + "," + NETAMNT + "," + STAX + "," + PAX + ", " + KOTID + ", '" + Remarks + "')", transaction: tran);
 
                                 cnMain.Execute(QUERY_RMD_KOTMAIN_STATUS, new KOTMAINSTATUS { TABLENO = TBLNO, STATUS = "ACTIVE", KOTID = KOTID }, transaction: tran);
 
@@ -193,7 +193,7 @@ namespace KOTapiStandardLibrary.Business
                                     int SNO = cnMain.ExecuteScalar<int>("SELECT ISNULL(MAX(SNO), 0) FROM RMD_KOTPROD KP JOIN RMD_KOTMAIN_STATUS KMS ON KP.KOTID=KMS.KOTID WHERE KMS.STATUS='ACTIVE' AND KP.TABLENO='" + TBLNO + "'", transaction: tran);
                                     kp.SNO = SNO + 1;
                                     cnMain.Execute(@"INSERT INTO RMD_KOTPROD (TABLENO, MCODE, UNIT, QUANTITY, REALQTY, AMOUNT, ItemDesc, KOTTIME, KITCHENDISPATCH, Remarks, DIVISION, TRNDATE, RATE, REALRATE, VAT, SERVICETAX, AltQty, DISCOUNT, WAREHOUSE, NAMNT, ISBOT, KOT, SNO, WAITERNAME, KOTID) 
-                                             VALUES (@TABLENO, @MCODE, @UNIT, @QUANTITY, @QUANTITY, @AMOUNT, @ItemDesc, @KOTTIME, 0, @Remarks, '" + GlobalClass.DIVISION + "', CONVERT(VARCHAR,GETDATE(),101), @RATE, @RATE, @VAT, @SERVICETAX, 0, 0, @WAREHOUSE, @NAMNT, @ISBOT, @KOT, @SNO, @WAITERNAME, " + KOTID + ")", kp, transaction: tran);
+                                             VALUES (@TABLENO, @MCODE, @UNIT, @QUANTITY, @QUANTITY, @AMOUNT, @ItemDesc, @KOTTIME, 0, @Remarks, '" + ConnectionDbInfo.DIVISION + "', CONVERT(VARCHAR,GETDATE(),101), @RATE, @RATE, @VAT, @SERVICETAX, 0, 0, @WAREHOUSE, @NAMNT, @ISBOT, @KOT, @SNO, @WAITERNAME, " + KOTID + ")", kp, transaction: tran);
                                 }
                             }
 
@@ -207,7 +207,7 @@ namespace KOTapiStandardLibrary.Business
                                     int SNO = cnMain.ExecuteScalar<int>("SELECT ISNULL(MAX(SNO), 0) FROM RMD_KOTPROD KP JOIN RMD_KOTMAIN_STATUS KMS ON KP.KOTID=KMS.KOTID WHERE KMS.STATUS='ACTIVE' AND KP.TABLENO='" + TBLNO + "'",transaction: tran);
                                     kp.SNO = SNO + 1;
                                     cnMain.Execute(@"INSERT INTO RMD_KOTPROD (TABLENO, MCODE, UNIT, QUANTITY, REALQTY, AMOUNT, ItemDesc, KOTTIME, KITCHENDISPATCH, Remarks, DIVISION, TRNDATE, RATE, REALRATE, VAT, SERVICETAX, AltQty, DISCOUNT, WAREHOUSE, NAMNT, ISBOT, KOT, SNO, WAITERNAME, KOTID) 
-                                             VALUES (@TABLENO, @MCODE, @UNIT, @QUANTITY, @QUANTITY, @AMOUNT, @ItemDesc, @KOTTIME, 0, @Remarks, '" + GlobalClass.DIVISION + "', CONVERT(VARCHAR,GETDATE(),101), @RATE, @RATE, @VAT, @SERVICETAX, 0, 0, @WAREHOUSE, @NAMNT, @ISBOT, @KOT, @SNO, @WAITERNAME, " + availableKOTID + ")", kp, transaction: tran);
+                                             VALUES (@TABLENO, @MCODE, @UNIT, @QUANTITY, @QUANTITY, @AMOUNT, @ItemDesc, @KOTTIME, 0, @Remarks, '" + ConnectionDbInfo.DIVISION + "', CONVERT(VARCHAR,GETDATE(),101), @RATE, @RATE, @VAT, @SERVICETAX, 0, 0, @WAREHOUSE, @NAMNT, @ISBOT, @KOT, @SNO, @WAITERNAME, " + availableKOTID + ")", kp, transaction: tran);
                                 }
 
                             }
@@ -276,7 +276,7 @@ namespace KOTapiStandardLibrary.Business
 
         //}
 
-        public static string MergeTable(MergeTransfer mergeTransfer)
+        public string MergeTable(MergeTransfer mergeTransfer)
         {
 
             try

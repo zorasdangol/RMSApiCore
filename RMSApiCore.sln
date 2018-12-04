@@ -7,9 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RMSApiCore", "RMSApiCore\RM
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KOTapiStandardLibrary", "KOTapiStandardLibrary\KOTapiStandardLibrary.csproj", "{ABE7D29C-37EA-47A7-888C-F3F4D308A6EC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KOTAppClassLibrary", "..\RMSnewApiClassLibrary\KOTAppClassLibrary\KOTAppClassLibrary.csproj", "{B36D6255-9903-49FF-83AF-6F75E35C070B}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "POSstandardLibrary", "..\..\..\IMSPOS\POSstandardLibrary\POSstandardLibrary.csproj", "{7C86EC7B-3045-4D57-90F3-5697E63BA0D1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KOTAppClassLibrary", "..\..\KOTAppClassLibrary\KOTAppClassLibrary\KOTAppClassLibrary.csproj", "{910E78BB-91BF-4A1E-BAFC-2871B6E021C5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,14 +23,10 @@ Global
 		{ABE7D29C-37EA-47A7-888C-F3F4D308A6EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ABE7D29C-37EA-47A7-888C-F3F4D308A6EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ABE7D29C-37EA-47A7-888C-F3F4D308A6EC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B36D6255-9903-49FF-83AF-6F75E35C070B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B36D6255-9903-49FF-83AF-6F75E35C070B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B36D6255-9903-49FF-83AF-6F75E35C070B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B36D6255-9903-49FF-83AF-6F75E35C070B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7C86EC7B-3045-4D57-90F3-5697E63BA0D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7C86EC7B-3045-4D57-90F3-5697E63BA0D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7C86EC7B-3045-4D57-90F3-5697E63BA0D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7C86EC7B-3045-4D57-90F3-5697E63BA0D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{910E78BB-91BF-4A1E-BAFC-2871B6E021C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{910E78BB-91BF-4A1E-BAFC-2871B6E021C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{910E78BB-91BF-4A1E-BAFC-2871B6E021C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{910E78BB-91BF-4A1E-BAFC-2871B6E021C5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

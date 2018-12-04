@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using ImsPosLibraryCore.Helper;
+using POSstandardLibrary.Helper;
 using KOTAppClassLibrary.Models;
 using System;
 using System.Collections.Generic;
@@ -8,17 +8,16 @@ using System.Text;
 
 namespace KOTapiStandardLibrary.Business
 {
-    public static class UserAccessMethods
+    public class UserAccessMethods
     {
-
-        public static string postuserVerification(User User)
+        public string postuserVerification(User User)
         {
             string USERNAME = User.UserName;
             string PASSWORD = User.Password;
             string UNIQUEID = User.UniqueID;
             string encPassword;
             string key = "AmitLalJoshi";
-            encPassword = GlobalClass.Encrypt(PASSWORD, key);
+            encPassword = ConnectionDbInfo.Encrypt(PASSWORD, key);
             using (SqlConnection cnMain = new SqlConnection(ConnectionDbInfo.ConnectionString))
             {
                 cnMain.Open();
@@ -43,13 +42,13 @@ namespace KOTapiStandardLibrary.Business
             }
         }
 
-        public static  void registerDevice(string UNIQUEID, SqlConnection cnMain)
+        public  void registerDevice(string UNIQUEID, SqlConnection cnMain)
         {
             if (cnMain.ExecuteScalar<int>("SELECT COUNT(*) FROM RMD_DEVICEVALIDATION WHERE UNIQUEID = @UNIQUEID", new { UNIQUEID = UNIQUEID }) == 0)
                 cnMain.Execute("INSERT INTO RMD_DEVICEVALIDATION (UNIQUEID, SALESTERMINAL,DIVISION,WAREHOUSE) SELECT TOP 1 @UNIQUEID DEVICE_ID, ST.NAME TERMINAL, @DIVISION DIVISION, W.NAME WAREHOUSE FROM SALESTERMINAL ST, RMD_WAREHOUSE W ORDER BY ISDEFAULT DESC", new { UNIQUEID = UNIQUEID, DIVISION = ConnectionDbInfo.DIVISION});
         }  
         
-        public static string CheckAccess(User User)
+        public string CheckAccess(User User)
         {
             string userName = User.UserName;
             string password = User.Password;

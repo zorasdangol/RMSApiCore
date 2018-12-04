@@ -5,7 +5,7 @@ using System.Text;
 using System.Data;
 using System.Data.SqlClient;
 using Dapper;
-using ImsPosLibraryCore.Helper;
+using POSstandardLibrary.Helper;
 
 namespace KOTapiStandardLibrary.Business
 {

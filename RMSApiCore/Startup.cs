@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ImsPosLibraryCore.Helper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using POSstandardLibrary.Helper;
+
 
 namespace RMSApiCore
 {
@@ -26,6 +27,8 @@ namespace RMSApiCore
         {
             services.AddMvc();
             services.AddSingleton<IConfiguration>(Configuration);
+            
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -38,6 +41,10 @@ namespace RMSApiCore
 
             app.UseMvc();
             GlobalSetting.GetSetting(ConnectionDbInfo.ConnectionString);
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<NewHub>("/NewHub");
+            });
             //new ConnectionDbInfo();
         }
     }

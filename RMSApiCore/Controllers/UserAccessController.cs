@@ -17,14 +17,14 @@ namespace RMSApiCore.Controllers
         [HttpPost]
         public string postuserVerification([FromBody]User User)
         {
-            return UserAccessMethods.postuserVerification(User);
+            return new UserAccessMethods().postuserVerification(User);
         }
         
         [Route("api/CheckAccess")]
         [HttpPost]
         public string CheckAccess([FromBody] User User)
         {
-            return UserAccessMethods.CheckAccess(User);            
+            return new UserAccessMethods().CheckAccess(User);            
         }
     }
 }

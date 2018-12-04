@@ -15,7 +15,7 @@ namespace RMSApiCore.Controllers
         [HttpGet("{dayCloseTable}")]
         public String getdayCloseTable()
         {
-            return TableDetailsMethods.getdayCloseTable();
+            return new TableDetailsMethods().getdayCloseTable();
 
         }
 
@@ -23,21 +23,21 @@ namespace RMSApiCore.Controllers
         [HttpGet("{GetTable}")]
         public FunctionResponse getTable()
         {
-            return TableDetailsMethods.getTable();
+            return new TableDetailsMethods().getTable();
         }
 
         [Route("api/GetPackedTable")]
         [HttpGet("{getPackedTable}")]
         public FunctionResponse getPackedTable()
         {
-            return TableDetailsMethods.getPackedTable();
+            return new TableDetailsMethods().getPackedTable();
         }
 
         [Route("api/GetTableItemsDetail")]
         [HttpGet("{TABLENO}")]
         public FunctionResponse getTableItemsDetail(string TABLENO)
         {
-            return TableDetailsMethods.getTableItemsDetail(TABLENO);
+            return new TableDetailsMethods().getTableItemsDetail(TABLENO);
         }
 
 
@@ -45,7 +45,7 @@ namespace RMSApiCore.Controllers
         [HttpPost]
         public string postsaveOrders_New([FromBody]KOTListTransfer KOTData)
         {
-            return TableDetailsMethods.postsaveOrders_New(KOTData);
+            return new TableDetailsMethods().postsaveOrders_New(KOTData);
         }
 
 
@@ -53,7 +53,7 @@ namespace RMSApiCore.Controllers
         //[HttpGet("CancelOrders/{tableNo}/{user}/{remarks}")]
         public string cancelOrders(string tableNo,string user, string remarks)
         {
-            return TableDetailsMethods.CancelOrder(tableNo, user, remarks);
+            return new TableDetailsMethods().CancelOrder(tableNo, user, remarks);
             //return TableDetailsMethods.getTableItemsDetail(TABLENO);
             return null;
         }
